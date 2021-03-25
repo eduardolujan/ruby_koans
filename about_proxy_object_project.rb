@@ -16,9 +16,58 @@ class Proxy
   def initialize(target_object)
     @object = target_object
     # ADD MORE CODE HERE
+    @spy_called = Hash.new(false)
+    @spy_times_called = Hash.new(0)
   end
 
   # WRITE CODE HERE
+  def channel
+    @spy_times_called[:channel] += 1
+    @spy_called[:channel] = true
+    @object.channel
+  end
+
+  def channel=(value)
+    @spy_times_called[:channel=] += 1
+    @spy_called[:channel=] = true
+    @object.channel = value
+  end
+
+  def power
+    @spy_times_called[:power] += 1
+    @spy_called[:power] = true
+    @object.power
+  end
+
+  def on?
+    @spy_times_called[:on?] += 1
+    @spy_called[:on?] = true
+    @object.on?
+  end
+
+  def messages
+    types = Hash(
+      Television => [:power, :channel=],
+      String => [:upcase!, :split]
+    )
+    types[@object.class]
+  end
+
+  def called?(value)
+    @spy_called[value]
+  end
+
+  def number_of_times_called(value)
+    @spy_times_called[value]
+  end
+
+  def upcase!
+    @object = @object.upcase
+  end
+
+  def split()
+    @object.split(" ")
+  end
 end
 
 # The proxy object should pass the following Koan:
